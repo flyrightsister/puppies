@@ -58,10 +58,25 @@ function createPuppy(req, res, next) {
     });
 }
 
+function updatePuppy(req, res, next) {
+  db.none('update pups set name=$1, breed=$2, age=$3, sex=$4 where id=$5',
+    [req.body.name, req.body.breed, parseInt(req.body.age), req.body.sex, parseInt(req.params.id)])
+    .then(function () {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Updated puppy'
+        });
+    })
+    .catch(function (err) {
+      return next(err)
+    });
+}
+
 module.exports = {
   getAllPuppies: getAllPuppies,
   getSinglePuppy: getSinglePuppy,
-  createPuppy: createPuppy
-  // updatePuppy: updatePuppy,
+  createPuppy: createPuppy,
+  updatePuppy: updatePuppy
   // removePuppy: removePuppy
 };
